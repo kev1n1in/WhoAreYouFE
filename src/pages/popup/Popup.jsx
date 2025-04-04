@@ -43,8 +43,11 @@ const Popup = () => {
           color: "white",
         }}
       >
-        When you hover over an Ethereum address on the page, the system will
-        automatically recognize it and display relevant information.
+        <ul>
+          <li>1. Enter your address</li>
+          <li>2. Click on the button</li>
+          <li>3. See the result</li>
+        </ul>
         <input
           type="text"
           placeholder="Enter Ethereum address"
