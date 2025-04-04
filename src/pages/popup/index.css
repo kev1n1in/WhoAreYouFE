@@ -1,0 +1,57 @@
+#app-container {
+  width: 540px;
+  height: 200px;
+  margin: 0;
+  font-family: "Orbitron", system-ui;
+  font-weight: 400;
+  font-style: normal;
+  position: relative;
+}
+
+code {
+  font-family: "Press Start 2P", monospace;
+}
+
+.container {
+  background-image: url(../../assets/popup_bg.png);
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 260px;
+  height: 350px;
+  background-color: #515151;
+}
+.text {
+  margin: 48px 24px 24px 40px;
+}
+.statue {
+  top: 50px;
+  right: 8px;
+  scale: 1.4;
+  cursor: pointer;
+}
+.cyber-card {
+  border: 1px solid #ffdd03;
+  background: #515151;
+  box-shadow: 0 0 10px #ffdd03;
+}
+
+.cyber-header {
+  background: linear-gradient(45deg, #515151);
+  border-bottom: 2px solid #ffdd03;
+}
+
+.cyber-text {
+  color: #ffdd03;
+  text-shadow: 0 0 5px #ffdd03;
+}
+
+.cyber-list li {
+  color: #ffdd03;
+  text-shadow: 0 0 3px #ffdd03;
+}
+
+.cyber-list li:hover {
+  color: #fff;
+  text-shadow: 0 0 8px #ffdd03;
+}
