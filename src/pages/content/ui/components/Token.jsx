@@ -7,11 +7,11 @@ export default function Token({
 }) {
   const data = Array.isArray(addressData) ? addressData[0] : addressData;
 
-  console.log("Token 組件處理後的數據:", data);
+  console.log("iconUrl", data.details.basicInfo.iconUrl);
   const chainLogoUrl =
     addressData.chain === "ETHEREUM" ? ETH_LOGO_URL : Base_LOGO_URL;
-  const iconUrl = address?.details?.basicInfo.iconUrl
-    ? address?.details?.basicInfo.iconUrl
+  const iconUrl = data.details.basicInfo.iconUrl
+    ? data.details.basicInfo.iconUrl
     : "https://bucket-kai-test.s3.ap-northeast-1.amazonaws.com/unknown_logo.svg";
   const handleClose = () => {
     chrome.runtime.sendMessage({ action: "hideModal" });
