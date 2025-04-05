@@ -32,31 +32,32 @@ export default function Wallet({ address, addressData, interactionsData }) {
         fontFamily: "Orbitron, sans-serif",
       }}
     >
-      <div
-        style={{
-          display: "flex",
-          position: "absolute",
-          right: "10px",
-          justifyContent: "space-between",
-          padding: "5px 10px",
-        }}
-      >
-        <button
-          onClick={handleClose}
+      <div>
+        <div
           style={{
-            fontWeight: "bold",
-            backgroundColor: "transparent",
-            border: "none",
-            color: "black",
-            cursor: "pointer",
-            fontSize: "20px",
+            display: "flex",
+            position: "absolute",
+            right: "10px",
+            justifyContent: "space-between",
+            padding: "5px 10px",
           }}
         >
-          X
-        </button>
+          <button
+            onClick={handleClose}
+            style={{
+              fontWeight: "bold",
+              backgroundColor: "transparent",
+              border: "none",
+              color: "black",
+              cursor: "pointer",
+              fontSize: "20px",
+            }}
+          >
+            X
+          </button>
+        </div>
+        <h1 style={{ margin: "0" }}>Wallet</h1>
       </div>
-      <h1 style={{ margin: "0" }}>Wallet</h1>
-
       <div
         style={{
           display: "flex",
@@ -69,19 +70,6 @@ export default function Wallet({ address, addressData, interactionsData }) {
             wordBreak: "break-all",
           }}
         >
-          {/* {!hasInteracted && (
-            <p
-              style={{
-                color: "red",
-                backgroundColor: " #f3f5f6",
-                margin: "4px 10px 4px 0",
-                padding: "0 4px",
-              }}
-            >
-              Suspicious account
-            </p>
-          )} */}
-
           <div
             style={{
               borderRadius: "4px",
@@ -109,7 +97,7 @@ export default function Wallet({ address, addressData, interactionsData }) {
                 wordBreak: "break-all",
                 color: "black",
                 backgroundColor: " #f3f5f6",
-                marginRight: "10px",
+                marginRight: "20px",
               }}
             >
               <p
@@ -117,7 +105,6 @@ export default function Wallet({ address, addressData, interactionsData }) {
                   margin: "4px 10px 4px 0",
                   padding: "0 4px",
                   fontSize: "14px",
-                  fontWeight: "bold",
                 }}
               >
                 Address：
@@ -127,6 +114,7 @@ export default function Wallet({ address, addressData, interactionsData }) {
                   margin: "4px 10px 4px 0",
                   padding: "0 4px",
                   fontSize: "12px",
+                  fontWeight: "bold",
                 }}
               >
                 {address}
@@ -145,29 +133,31 @@ export default function Wallet({ address, addressData, interactionsData }) {
               <p
                 style={{
                   color: "green",
-                  backgroundColor: " #f3f5f6",
-                  margin: "4px 10px 4px 0",
+                  backgroundColor: "#f3f5f6",
+                  margin: "0 20px 4px 0",
                   padding: "0 4px",
                 }}
               >
-                Have interacted {interactionsData?.details?.interactionCount}{" "}
-                times before
+                Interacted {interactionsData?.details?.interactionCount} times
+                before
               </p>
             </div>
             <div
               style={{
                 borderRadius: "4px",
+                paddingLeft: "4px",
+                marginRight: "20px",
                 wordBreak: "break-all",
+                backgroundColor: " #f3f5f6",
               }}
             >
+              <p style={{ margin: "0" }}>Last interaction detail:</p>
               <a
-                href={`https://etherscan.io/tx/${address}`}
+                href={`https://etherscan.io/tx/${interactionsData?.details?.lastInteractionHash}`}
                 target="_blank"
                 style={{
-                  backgroundColor: " #f3f5f6",
-                  margin: "4px 10px 4px 0",
-                  padding: "0 4px",
                   textDecoration: "none",
+                  fontWeight: "bold",
                 }}
               >
                 {interactionsData?.details?.lastInteractionHash}
@@ -177,13 +167,23 @@ export default function Wallet({ address, addressData, interactionsData }) {
               style={{
                 borderRadius: "4px",
                 wordBreak: "break-all",
+                padding: "0 4px",
+                backgroundColor: " #f3f5f6",
+                marginRight: "20px",
+                marginTop: "4px",
               }}
             >
               <p
                 style={{
-                  backgroundColor: " #f3f5f6",
-                  margin: "4px 10px 4px 0",
-                  padding: "0 4px",
+                  margin: "0",
+                }}
+              >
+                Last interaction time:
+              </p>
+              <p
+                style={{
+                  margin: "0",
+                  fontWeight: "bold",
                 }}
               >
                 {interactionsData?.details?.lastTimestamp
