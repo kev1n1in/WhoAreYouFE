@@ -1,12 +1,6 @@
 /* global chrome */
-export default function Token({ address, value, releaseDate, tokenHolders }) {
-  console.log(
-    "content in data response box",
-    address,
-    value,
-    releaseDate,
-    tokenHolders
-  );
+export default function Token({ address, addressData }) {
+  console.log("content in data response box", address, addressData);
 
   const handleClose = () => {
     chrome.runtime.sendMessage({ action: "hideModal" });
@@ -74,7 +68,16 @@ export default function Token({ address, value, releaseDate, tokenHolders }) {
               padding: "0 4px",
             }}
           >
-            Price：
+            Name：{addressData?.details?.name}
+          </p>
+          <p
+            style={{
+              backgroundColor: " #f3f5f6",
+              margin: "4px 10px 4px 0",
+              padding: "0 4px",
+            }}
+          >
+            Symbol：{addressData?.details?.symbol}
           </p>
 
           <div

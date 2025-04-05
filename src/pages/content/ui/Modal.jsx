@@ -11,6 +11,22 @@ export default function Modal() {
   const [displayMode, setDisplayMode] = useState("wallet");
   const [addressData, setAddressData] = useState(null);
 
+  const setDisplayModeByAddressType = (data) => {
+    if (!data || !data.addressType) return;
+
+    switch (data.addressType) {
+      case "ERC-20":
+        setDisplayMode("token");
+        break;
+      case "ERC-721":
+      case "ERC-1155":
+        setDisplayMode("nfts");
+        break;
+      default:
+        setDisplayMode("wallet");
+        break;
+    }
+  };
   const sendMessageWithRetry = (message, callback) => {
     const trySend = () => {
       try {
@@ -82,7 +98,12 @@ export default function Modal() {
             return true;
           }
           break;
-
+        case "addressDataFetched":
+          if (request.data) {
+            setAddressData(request.data);
+            setDisplayModeByAddressType(request.data);
+          }
+          break;
         case "backgroundReady":
           sendResponse({
             status: "received",
@@ -93,23 +114,6 @@ export default function Modal() {
             },
           });
           return true;
-
-        case "addressDataFetched":
-          if (request.data) {
-            console.log("Received address data from background:", request.data);
-            setAddressData(request.data);
-            sendResponse({
-              status: "handled",
-              message: "已接收地址數據",
-              state: {
-                ready: true,
-                mounted: true,
-                fullyReady: true,
-              },
-            });
-            return true;
-          }
-          break;
       }
 
       sendResponse({
@@ -180,7 +184,6 @@ export default function Modal() {
               padding: "20px",
               borderRadius: "8px",
               boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-              overflow: "hidden",
             }}
           >
             <div

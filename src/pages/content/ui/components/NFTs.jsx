@@ -1,7 +1,7 @@
 /* global chrome */
 
-export default function NFTs({ address }) {
-  console.log("content in data response box", address);
+export default function Wallet({ address, addressData }) {
+  console.log("content in data response box", address, addressData);
   const handleClose = () => {
     chrome.runtime.sendMessage({ action: "hideModal" });
   };

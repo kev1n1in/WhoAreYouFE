@@ -123,7 +123,7 @@ function triggerMouseOver() {
         try {
           chrome.runtime.sendMessage({
             action: "fetchAddressData",
-            address: "0x5a98fcbea516cf06857215779fd812ca3bef1b32",
+            address: foundAddress[0],
           });
         } catch (error) {
           console.error("Failed to send fetch request message:", error);
