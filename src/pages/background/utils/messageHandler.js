@@ -125,6 +125,25 @@ export function handleMessage(request, sender, sendResponse) {
       });
       break;
 
+    case "addressEvent":
+      // Forward the address event message to the content script
+      if (request.address && request.eventType) {
+        chrome.tabs.query(
+          { active: true, currentWindow: true },
+          function (tabs) {
+            if (tabs.length > 0) {
+              sendTabMessage(tabs[0].id, {
+                action: "addressEvent",
+                address: request.address,
+                eventType: request.eventType,
+              });
+            }
+          }
+        );
+      }
+      sendResponse({ status: "received" });
+      break;
+
     case "fetchAddressData":
       if (request.address) {
         console.log(

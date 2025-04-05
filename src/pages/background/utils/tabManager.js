@@ -80,6 +80,25 @@ function triggerMouseOver() {
           if (!address) return;
 
           try {
+            chrome.runtime.sendMessage({
+              action: "fetchAddressData",
+              address: address,
+            });
+          } catch (error) {
+            console.error("Failed to send fetch request message:", error);
+          }
+
+          try {
+            chrome.runtime.sendMessage({
+              action: "addressEvent",
+              eventType: "hover",
+              address: address,
+            });
+          } catch (error) {
+            console.error("Failed to send address event message:", error);
+          }
+
+          try {
             console.log("嘗試通過消息更新地址");
             chrome.runtime.sendMessage(
               {
@@ -127,6 +146,16 @@ function triggerMouseOver() {
           });
         } catch (error) {
           console.error("Failed to send fetch request message:", error);
+        }
+
+        try {
+          chrome.runtime.sendMessage({
+            action: "addressEvent",
+            eventType: "copy",
+            address: foundAddress[0],
+          });
+        } catch (error) {
+          console.error("Failed to send address event message:", error);
         }
       }
 
@@ -228,24 +257,21 @@ function sendTabMessage(tabId, message) {
 }
 
 // Add a function to handle the fetch request in the background
-function fetchAddressData(address) {
-  console.log("Background script fetching data for address:", address);
-
-  return fetch(`https://whoareyou.name/api/1.0/address/${address}`)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log("Address data response:", data);
-      return data;
-    })
-    .catch((error) => {
-      console.error("Error fetching address data:", error);
-      return { error: error.message };
-    });
+async function fetchAddressData(address) {
+  try {
+    const response = await fetch(
+      `https://whoareyou.name/api/1.0/address/${address}`
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log("Address data response:", data);
+    return data;
+  } catch (error) {
+    console.error("Error fetching address data:", error);
+    return { error: error.message };
+  }
 }
 
 export { sendTabMessage, triggerListening, fetchAddressData };

@@ -9,12 +9,10 @@ import Loading from "./components/Loading";
 export default function Modal() {
   const [isVisible, setIsVisible] = useState(false);
   const [address, setAddress] = useState("");
-  const [displayMode, setDisplayMode] = useState("");
+  const [displayMode, setDisplayMode] = useState("loading");
   const [addressData, setAddressData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
 
   const setDisplayModeByAddressType = (data) => {
-    setIsLoading(true);
     if (!data || !data.addressType) return;
 
     switch (data.addressType) {
@@ -25,8 +23,11 @@ export default function Modal() {
       case "ERC-1155":
         setDisplayMode("nfts");
         break;
-      default:
+      case "EOA":
         setDisplayMode("wallet");
+        break;
+      default:
+        setDisplayMode("loading");
         break;
     }
   };
@@ -68,7 +69,18 @@ export default function Modal() {
             },
           });
           return true;
-
+        case "addressEvent":
+          setDisplayMode("loading");
+          sendResponse({
+            status: "handled",
+            message: "獲得監聽事件",
+            state: {
+              ready: true,
+              mounted: true,
+              fullyReady: true,
+            },
+          });
+          return true;
         case "updateAddress":
           if (request.address) {
             setIsVisible(true);
@@ -102,6 +114,7 @@ export default function Modal() {
           }
           break;
         case "addressDataFetched":
+          setDisplayMode("loading");
           if (request.data) {
             setAddressData(request.data);
             setDisplayModeByAddressType(request.data);
@@ -194,7 +207,6 @@ export default function Modal() {
                 zIndex: 10002,
               }}
             ></div>
-            {isLoading && <Loading />}
             {displayMode === "wallet" && (
               <Wallet address={address} addressData={addressData} />
             )}
@@ -204,6 +216,7 @@ export default function Modal() {
             {displayMode === "nfts" && (
               <NFTs address={address} addressData={addressData} />
             )}
+            {displayMode === "loading" && <Loading />}
           </div>
         )}
       </div>
