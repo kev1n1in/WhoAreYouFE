@@ -1,10 +1,10 @@
 /* global chrome */
 import { useEffect, useState } from "react";
-import Wallet from "./components/Wallet";
 import Token from "./components/Token";
 import Font from "./components/Font";
-import NFTs from "./components/NFTs";
+import NFT from "./components/NFT";
 import Loading from "./components/Loading";
+import Wallets from "./components/Wallets/Wallets";
 
 export default function Modal() {
   const [isVisible, setIsVisible] = useState(false);
@@ -130,7 +130,11 @@ export default function Modal() {
           if (request.data) {
             console.log("收到的原始數據:", request.data.data);
 
-            setAddressData(request.data.data[0]);
+            setAddressData(
+              request.data.data.length === 1
+                ? request.data.data[0]
+                : request.data.data
+            );
             setDisplayModeByAddressType(request.data.data);
           }
           break;
@@ -228,7 +232,7 @@ export default function Modal() {
               }}
             ></div>
             {displayMode === "wallet" && (
-              <Wallet
+              <Wallets
                 address={address}
                 addressData={addressData}
                 interactionsData={interactionsData}
@@ -245,7 +249,7 @@ export default function Modal() {
               />
             )}
             {displayMode === "nfts" && (
-              <NFTs
+              <NFT
                 address={address}
                 addressData={addressData}
                 ETH_LOGO_URL={ETH_LOGO_URL}

@@ -38,6 +38,7 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         input: {
           contentUI: resolve(pagesDir, "content", "ui", "index.js"),
+          contentUIInjected: resolve(pagesDir, "content", "ui", "injected.css"),
           background: resolve(pagesDir, "background", "index.js"),
           content: resolve(pagesDir, "content", "index.js"),
           contentStyle: resolve(pagesDir, "content", "style.scss"),

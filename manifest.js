@@ -15,11 +15,11 @@ const manifest = {
   },
   action: {
     default_popup: "src/pages/popup/index.html",
-    default_icon: "logo-128.png",
+    default_icon: "logo_128.png",
   },
 
   icons: {
-    128: "logo-128.png",
+    128: "logo_128.png",
   },
   content_scripts: [
     {
@@ -34,7 +34,7 @@ const manifest = {
         "assets/statue.png",
         "assets/js/*.js",
         "assets/css/*.css",
-        "logo-128.png",
+        "logo_128.png",
         "assets/*",
       ],
       matches: ["*://*/*", "file:///*"],
