@@ -11,11 +11,31 @@ export default function Modal() {
   const [address, setAddress] = useState("");
   const [displayMode, setDisplayMode] = useState("loading");
   const [addressData, setAddressData] = useState(null);
-  const [interactionsData, setInteractionsData] = useState(null);
   const ETH_LOGO_URL =
     "https://bucket-kai-test.s3.ap-northeast-1.amazonaws.com/Ethereum_Network_logo.svg";
   const Base_LOGO_URL =
     "https://bucket-kai-test.s3.ap-northeast-1.amazonaws.com/Base_Network_Logo.svg";
+
+  // Feature translation map
+  const featureMap = {
+    tx_count: "Total TX",
+    avg_value: "Avg Value",
+    max_value: "Max Value",
+    median_gas_price: "Median Gas",
+    unique_receivers: "Unique To",
+    unique_senders: "Unique From",
+    tx_per_day: "TX/Day",
+    in_tx_count: "In TX",
+    out_tx_count: "Out TX",
+    in_out_ratio: "In/Out Ratio",
+    self_tx_ratio: "Self TX Ratio",
+    max_tx_in_1h: "Max TX 1h",
+    max_tx_in_5min: "Max TX 5m",
+    tx_time_std: "Time Std",
+    zero_value_tx_ratio: "Zero TX Ratio",
+    high_value_tx_ratio: "High TX Ratio",
+    short_time_repeated_tx: "Repeat TX (1m)",
+  };
 
   const setDisplayModeByAddressType = (data) => {
     if (!data) return;
@@ -139,11 +159,6 @@ export default function Modal() {
           }
           break;
 
-        case "interactionsDataFetched":
-          if (request.data) {
-            setInteractionsData(request.data.data);
-          }
-          break;
         case "backgroundReady":
           sendResponse({
             status: "received",
@@ -235,9 +250,9 @@ export default function Modal() {
               <Wallets
                 address={address}
                 addressData={addressData}
-                interactionsData={interactionsData}
                 ETH_LOGO_URL={ETH_LOGO_URL}
                 Base_LOGO_URL={Base_LOGO_URL}
+                featureMap={featureMap}
               />
             )}
             {displayMode === "token" && (
@@ -246,6 +261,7 @@ export default function Modal() {
                 addressData={addressData}
                 ETH_LOGO_URL={ETH_LOGO_URL}
                 Base_LOGO_URL={Base_LOGO_URL}
+                featureMap={featureMap}
               />
             )}
             {displayMode === "nfts" && (

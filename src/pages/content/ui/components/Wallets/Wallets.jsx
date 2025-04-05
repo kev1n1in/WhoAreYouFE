@@ -8,6 +8,7 @@ export default function Wallets({
   interactionsData,
   ETH_LOGO_URL,
   Base_LOGO_URL,
+  featureMap,
 }) {
   const [emblaRef, emblaApi] = useEmblaCarousel();
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -98,6 +99,7 @@ export default function Wallets({
                 wallet={wallet}
                 ETH_LOGO_URL={ETH_LOGO_URL}
                 Base_LOGO_URL={Base_LOGO_URL}
+                featureMap={featureMap}
               />
             </div>
           ))}

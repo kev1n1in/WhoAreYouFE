@@ -1,10 +1,11 @@
-const Wallet = ({ wallet, ETH_LOGO_URL, Base_LOGO_URL }) => {
+const Wallet = ({ wallet, ETH_LOGO_URL, Base_LOGO_URL, featureMap }) => {
   console.log("wallet", wallet);
   const hasInteractions = wallet?.details?.interaction?.interacted === true;
   const interactedBefore = hasInteractions ? "Yes" : "No";
   const textColor = hasInteractions ? "green" : "red";
   const chainLogoUrl =
     wallet?.chain === "ETHEREUM" ? ETH_LOGO_URL : Base_LOGO_URL;
+  const anomalyAccount = wallet?.details?.anomalyDetection;
 
   const divStyle = {
     backgroundColor: "#f3f5f6",
@@ -88,6 +89,24 @@ const Wallet = ({ wallet, ETH_LOGO_URL, Base_LOGO_URL }) => {
         <div style={divStyle}>
           <p style={{ margin: 0, fontSize: "12px" }}>Interacted?</p>
           <p style={{ margin: 0, color: "red" }}>No</p>
+        </div>
+      )}
+
+      {anomalyAccount && (
+        <div style={divStyle}>
+          <p style={{ margin: 0, fontSize: "12px" }}>Top 3 Anomaly Features</p>
+          <p style={{ margin: 0, color: textColor }}>
+            {featureMap[wallet?.details?.anomalyDetection.top_3_features[0]] ||
+              wallet?.details?.anomalyDetection.top_3_features[0]}
+          </p>
+          <p style={{ margin: 0, color: textColor }}>
+            {featureMap[wallet?.details?.anomalyDetection.top_3_features[1]] ||
+              wallet?.details?.anomalyDetection.top_3_features[1]}
+          </p>
+          <p style={{ margin: 0, color: textColor }}>
+            {featureMap[wallet?.details?.anomalyDetection.top_3_features[2]] ||
+              wallet?.details?.anomalyDetection.top_3_features[2]}
+          </p>
         </div>
       )}
     </div>

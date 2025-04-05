@@ -86,12 +86,9 @@ function triggerMouseOver() {
     document.addEventListener("mouseover", function (event) {
       const targetElement = event.target;
       try {
-        // 只檢查當前鼠標懸停的元素
         const addressFound = findEthAddressInElement(targetElement);
 
         if (addressFound) {
-          console.log("檢測到以太坊地址:", addressFound);
-
           try {
             chrome.runtime.sendMessage({
               action: "fetchAddressData",
@@ -139,7 +136,7 @@ function triggerMouseOver() {
               // 清除標記，允許再次檢測
               setTimeout(() => {
                 targetElement._ethAddressChecked = false;
-              }, 1000);
+              }, 2000);
             },
             { once: true }
           );
@@ -301,32 +298,31 @@ async function getSelfAddress() {
   });
 }
 
-async function fetchInteractions(address) {
-  console.log("fetching interactions for address:", address);
+// async function fetchInteractions(address) {
+//   console.log("fetching interactions for address:", address);
 
-  const selfAddress = await getSelfAddress();
-  console.log("selfAddress:", selfAddress);
+//   const selfAddress = await getSelfAddress();
+//   console.log("selfAddress:", selfAddress);
 
-  try {
-    const response = await fetch(
-      `https://whoareyou.name/api/1.0/address/${address}?selfAddress=${selfAddress}`
-    );
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    const data = await response.json();
-    console.log("Interactions data response:", data);
-    return data;
-  } catch (error) {
-    console.error("Error fetching interactions:", error);
-    return { error: error.message };
-  }
-}
+//   try {
+//     const response = await fetch(
+//       `https://whoareyou.name/api/1.0/address/${address}?selfAddress=${selfAddress}`
+//     );
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! Status: ${response.status}`);
+//     }
+//     const data = await response.json();
+//     console.log("Interactions data response:", data);
+//     return data;
+//   } catch (error) {
+//     console.error("Error fetching interactions:", error);
+//     return { error: error.message };
+//   }
+// }
 export {
   sendTabMessage,
   triggerListening,
   fetchAddressData,
-  fetchInteractions,
   getSelfAddress,
   setupTabListeners,
 };

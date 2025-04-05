@@ -5,7 +5,6 @@ import {
   sendTabMessage,
   triggerListening,
   fetchAddressData,
-  fetchInteractions,
 } from "./tabManager.js";
 
 export function handleMessage(request, sender, sendResponse) {
@@ -21,7 +20,6 @@ export function handleMessage(request, sender, sendResponse) {
 
     case "resendMessage":
       if (request.originalMessage) {
-        console.log("處理重發的消息:", request.originalMessage.action);
         if (tabId) {
           sendTabMessage(tabId, request.originalMessage);
         }
@@ -58,7 +56,6 @@ export function handleMessage(request, sender, sendResponse) {
 
     case "appMounted":
       if (tabId) {
-        console.log(`標籤頁 ${tabId} 的App.vue已掛載`);
         if (tabContentScriptStatus[tabId]) {
           tabContentScriptStatus[tabId].vueMounted = true;
         } else {
@@ -74,7 +71,6 @@ export function handleMessage(request, sender, sendResponse) {
 
     case "contentScriptFullyReady":
       if (tabId) {
-        console.log(`標籤頁 ${tabId} 的content script已完全就緒`);
         tabContentScriptStatus[tabId] = {
           ready: true,
           vueMounted: true,
@@ -98,7 +94,7 @@ export function handleMessage(request, sender, sendResponse) {
           vueMounted: false,
           fullyReady: false,
         };
-        console.log(`當前標籤頁的content script狀態:`, contentScriptStatus);
+        console.log(contentScriptStatus);
 
         // 不論狀態如何，都直接嘗試顯示Modal
         triggerListening(activeTabId);
@@ -147,14 +143,9 @@ export function handleMessage(request, sender, sendResponse) {
 
     case "fetchAddressData":
       if (request.address) {
-        console.log(
-          "Background script received request to fetch address data:",
-          request.address
-        );
         fetchAddressData(request.address)
           .then((data) => {
             // 詳細記錄獲取到的數據
-            console.log("fetchAddressData 返回的原始數據:", data);
             console.log(
               "數據類型:",
               typeof data,
@@ -186,23 +177,6 @@ export function handleMessage(request, sender, sendResponse) {
             sendResponse({ status: "error", error: error.message });
           });
 
-        fetchInteractions(request.address, request.selfAddress)
-          .then((data) => {
-            console.log("Interactions data response:", data);
-            // Send the interactions data back to the content script
-            if (tabId) {
-              sendTabMessage(tabId, {
-                action: "interactionsDataFetched",
-                address: request.address,
-                data: data,
-              });
-            }
-          })
-          .catch((error) => {
-            console.error("Error in fetchInteractions:", error);
-          });
-
-        // Return true to indicate we will send the response asynchronously
         return true;
       }
       break;
