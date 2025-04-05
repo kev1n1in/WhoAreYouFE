@@ -12,7 +12,7 @@ function triggerListening(tabId) {
 }
 function triggerMouseOver() {
   console.log("ethereum address detecting");
-  const ETH_ADDRESS_REGEX = /0x[a-fA-F0-9]{40}/g;
+  const ETH_ADDRESS_REGEX = /\b0x[a-fA-F0-9]{40}\b/g;
 
   try {
     try {
@@ -131,6 +131,7 @@ function triggerMouseOver() {
       }
     });
     document.addEventListener("copy", function () {
+      console.log("copy event detected");
       const selectedText = window.getSelection().toString();
       const matches = selectedText.match(ETH_ADDRESS_REGEX);
       let foundAddress = null;
@@ -273,5 +274,24 @@ async function fetchAddressData(address) {
     return { error: error.message };
   }
 }
-
-export { sendTabMessage, triggerListening, fetchAddressData };
+async function fetchInteractions(address, selfAddress) {
+  console.log("fetching interactions for address:", address);
+  console.log("selfAddress:", selfAddress);
+  try {
+    const response = await fetch(
+      `https://whoareyou.name/api/1.0/address/0x015650d60DEc6C25eD759FC776D9A29836fb965f?selfAddress=0x19d146A2A4b7d84842E2d6C9691bDd5b0cAd8489`
+    );
+    const data = await response.json();
+    console.log("Interactions data response:", data);
+    return data;
+  } catch (error) {
+    console.error("Error fetching interactions:", error);
+    return { error: error.message };
+  }
+}
+export {
+  sendTabMessage,
+  triggerListening,
+  fetchAddressData,
+  fetchInteractions,
+};

@@ -119,7 +119,7 @@ export default function Token({ address, addressData }) {
           >
             <p
               style={{
-                margin: "4px 10px 4px 0",
+                margin: "12px 10px 4px 0",
                 padding: "0 4px",
                 fontSize: "14px",
                 fontWeight: "bold",
@@ -150,7 +150,7 @@ export default function Token({ address, addressData }) {
             >
               <p
                 style={{
-                  margin: "4px 10px 4px 0",
+                  margin: "12px 10px 4px 0",
                   padding: "0 4px",
                   fontSize: "14px",
                   fontWeight: "bold",

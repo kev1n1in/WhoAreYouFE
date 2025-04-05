@@ -5,6 +5,7 @@ import {
   sendTabMessage,
   triggerListening,
   fetchAddressData,
+  fetchInteractions,
 } from "./tabManager.js";
 
 export function handleMessage(request, sender, sendResponse) {
@@ -165,6 +166,22 @@ export function handleMessage(request, sender, sendResponse) {
           .catch((error) => {
             console.error("Error in fetchAddressData:", error);
             sendResponse({ status: "error", error: error.message });
+          });
+
+        fetchInteractions(request.address, request.selfAddress)
+          .then((data) => {
+            console.log("Interactions data response:", data);
+            // Send the interactions data back to the content script
+            if (tabId) {
+              sendTabMessage(tabId, {
+                action: "interactionsDataFetched",
+                address: request.address,
+                data: data,
+              });
+            }
+          })
+          .catch((error) => {
+            console.error("Error in fetchInteractions:", error);
           });
 
         // Return true to indicate we will send the response asynchronously

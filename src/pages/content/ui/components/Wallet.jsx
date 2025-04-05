@@ -1,8 +1,15 @@
 /* global chrome */
 
-export default function Wallet({ address, addressData }) {
-  console.log("content in data response box", address, addressData);
+export default function Wallet({ address, addressData, interactionsData }) {
+  console.log(
+    "content in data response box",
+    address,
+    addressData,
+    interactionsData
+  );
   // Conditional rendering based on contract
+  const hasInteracted = interactionsData?.details?.interacted;
+  console.log("hasInteracted", hasInteracted);
   const handleClose = () => {
     chrome.runtime.sendMessage({ action: "hideModal" });
   };
@@ -62,7 +69,7 @@ export default function Wallet({ address, addressData }) {
             wordBreak: "break-all",
           }}
         >
-          {addressData && addressData.isSuspicious && (
+          {/* {!hasInteracted && (
             <p
               style={{
                 color: "red",
@@ -73,20 +80,7 @@ export default function Wallet({ address, addressData }) {
             >
               Suspicious account
             </p>
-          )}
-
-          {addressData && addressData.hasInteracted && (
-            <p
-              style={{
-                color: "green",
-                backgroundColor: " #f3f5f6",
-                margin: "4px 10px 4px 0",
-                padding: "0 4px",
-              }}
-            >
-              Have interacted before
-            </p>
-          )}
+          )} */}
 
           <div
             style={{
@@ -140,6 +134,71 @@ export default function Wallet({ address, addressData }) {
             </div>
           )}
         </div>
+        {hasInteracted && (
+          <div>
+            <div
+              style={{
+                borderRadius: "4px",
+                wordBreak: "break-all",
+              }}
+            >
+              <p
+                style={{
+                  color: "green",
+                  backgroundColor: " #f3f5f6",
+                  margin: "4px 10px 4px 0",
+                  padding: "0 4px",
+                }}
+              >
+                Have interacted {interactionsData?.details?.interactionCount}{" "}
+                times before
+              </p>
+            </div>
+            <div
+              style={{
+                borderRadius: "4px",
+                wordBreak: "break-all",
+              }}
+            >
+              <a
+                href={`https://etherscan.io/tx/${address}`}
+                target="_blank"
+                style={{
+                  backgroundColor: " #f3f5f6",
+                  margin: "4px 10px 4px 0",
+                  padding: "0 4px",
+                  textDecoration: "none",
+                }}
+              >
+                {interactionsData?.details?.lastInteractionHash}
+              </a>
+            </div>
+            <div
+              style={{
+                borderRadius: "4px",
+                wordBreak: "break-all",
+              }}
+            >
+              <p
+                style={{
+                  backgroundColor: " #f3f5f6",
+                  margin: "4px 10px 4px 0",
+                  padding: "0 4px",
+                }}
+              >
+                {interactionsData?.details?.lastTimestamp
+                  ? new Date(
+                      interactionsData.details.lastTimestamp * 1000
+                    ).toLocaleString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })
+                  : ""}
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -53,7 +53,7 @@ export default function Wallet({ address, addressData }) {
       <div>
         <img
           src={addressData?.details?.imageUrl}
-          alt="NFTName"
+          alt={addressData?.details?.name}
           style={{
             width: "225px",
             height: "225px",

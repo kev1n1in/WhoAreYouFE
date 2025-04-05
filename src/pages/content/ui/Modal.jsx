@@ -11,6 +11,7 @@ export default function Modal() {
   const [address, setAddress] = useState("");
   const [displayMode, setDisplayMode] = useState("loading");
   const [addressData, setAddressData] = useState(null);
+  const [interactionsData, setInteractionsData] = useState(null);
 
   const setDisplayModeByAddressType = (data) => {
     if (!data || !data.addressType) return;
@@ -69,6 +70,7 @@ export default function Modal() {
             },
           });
           return true;
+
         case "addressEvent":
           setDisplayMode("loading");
           sendResponse({
@@ -81,6 +83,7 @@ export default function Modal() {
             },
           });
           return true;
+
         case "updateAddress":
           if (request.address) {
             setIsVisible(true);
@@ -113,11 +116,18 @@ export default function Modal() {
             return true;
           }
           break;
+
         case "addressDataFetched":
           setDisplayMode("loading");
           if (request.data) {
             setAddressData(request.data);
             setDisplayModeByAddressType(request.data);
+          }
+          break;
+
+        case "interactionsDataFetched":
+          if (request.data) {
+            setInteractionsData(request.data);
           }
           break;
         case "backgroundReady":
@@ -208,7 +218,11 @@ export default function Modal() {
               }}
             ></div>
             {displayMode === "wallet" && (
-              <Wallet address={address} addressData={addressData} />
+              <Wallet
+                address={address}
+                addressData={addressData}
+                interactionsData={interactionsData}
+              />
             )}
             {displayMode === "token" && (
               <Token address={address} addressData={addressData} />
