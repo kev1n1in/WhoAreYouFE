@@ -10,11 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
     "alchemy-sdk": "^3.5.6",
     "bootstrap": "^5.3.4",
     "magic-string": "^0.30.17",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-loader-spinner": "^6.1.6",
     "ws": "^8.18.1"
   },
   "devDependencies": {

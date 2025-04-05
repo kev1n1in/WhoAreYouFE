@@ -4,14 +4,17 @@ import Wallet from "./components/Wallet";
 import Token from "./components/Token";
 import Font from "./components/Font";
 import NFTs from "./components/NFTs";
+import Loading from "./components/Loading";
 
 export default function Modal() {
   const [isVisible, setIsVisible] = useState(false);
   const [address, setAddress] = useState("");
-  const [displayMode, setDisplayMode] = useState("wallet");
+  const [displayMode, setDisplayMode] = useState("");
   const [addressData, setAddressData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const setDisplayModeByAddressType = (data) => {
+    setIsLoading(true);
     if (!data || !data.addressType) return;
 
     switch (data.addressType) {
@@ -191,6 +194,7 @@ export default function Modal() {
                 zIndex: 10002,
               }}
             ></div>
+            {isLoading && <Loading />}
             {displayMode === "wallet" && (
               <Wallet address={address} addressData={addressData} />
             )}
