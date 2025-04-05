@@ -52,7 +52,7 @@ export default function Wallet({ address, addressData }) {
       </div>
       <div>
         <img
-          src="https://i.seadn.io/s/raw/files/e188cde597e8e3b883b61e5fe3bc7ffd.png?auto=format&dpr=1&w=1000"
+          src={addressData?.details?.imageUrl}
           alt="NFTName"
           style={{
             width: "225px",
@@ -73,7 +73,7 @@ export default function Wallet({ address, addressData }) {
             padding: "0 4px",
           }}
         >
-          Current price:
+          Name: {addressData?.details?.name}
         </p>
         <p
           style={{
@@ -82,7 +82,7 @@ export default function Wallet({ address, addressData }) {
             padding: "0 4px",
           }}
         >
-          Published on：
+          Total: {addressData?.details?.totalSupply}
         </p>
       </div>
       {address && (

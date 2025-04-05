@@ -150,10 +150,6 @@ export default function Modal() {
     sendMessageWithRetry({ action: "hideModal" });
   };
 
-  const handleModeSwitch = (mode) => {
-    setDisplayMode(mode);
-  };
-
   return (
     <Font>
       <div style={{ position: "relative" }}>
@@ -194,48 +190,7 @@ export default function Modal() {
                 marginBottom: "10px",
                 zIndex: 10002,
               }}
-            >
-              <button
-                onClick={() => handleModeSwitch("wallet")}
-                style={{
-                  padding: "5px 10px",
-                  marginRight: "10px",
-                  backgroundColor:
-                    displayMode === "wallet" ? "#f0f0f0" : "transparent",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                }}
-              >
-                Wallet
-              </button>
-              <button
-                onClick={() => handleModeSwitch("token")}
-                style={{
-                  padding: "5px 10px",
-                  backgroundColor:
-                    displayMode === "token" ? "#f0f0f0" : "transparent",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                }}
-              >
-                Token
-              </button>
-              <button
-                onClick={() => handleModeSwitch("nfts")}
-                style={{
-                  padding: "5px 10px",
-                  backgroundColor:
-                    displayMode === "token" ? "#f0f0f0" : "transparent",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                }}
-              >
-                NFTs
-              </button>
-            </div>
+            ></div>
             {displayMode === "wallet" && (
               <Wallet address={address} addressData={addressData} />
             )}
