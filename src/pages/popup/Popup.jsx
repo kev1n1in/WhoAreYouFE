@@ -4,6 +4,7 @@ import "@pages/popup/Popup.css";
 import cyber_bg from "../../assets/cyber_bg.jpg";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
+import CyberTitle from "./CyberTitle";
 
 const Popup = () => {
   const [ethAddress, setEthAddress] = useState("");
@@ -30,6 +31,7 @@ const Popup = () => {
       }}
       onClick={handleListening}
     >
+      <CyberTitle />
       <div
         style={{
           position: "absolute",
@@ -43,10 +45,21 @@ const Popup = () => {
           color: "white",
         }}
       >
-        <ul>
-          <li>1. Enter your address</li>
-          <li>2. Click on the button</li>
-          <li>3. See the result</li>
+        <ul
+          style={{ listStyle: "none", marginBottom: "4px", paddingLeft: "4px" }}
+        >
+          <li>
+            <span style={{ display: "inline-block", width: "20px" }}>1.</span>{" "}
+            Enter your address
+          </li>
+          <li>
+            <span style={{ display: "inline-block", width: "20px" }}>2.</span>{" "}
+            Hover or Copy the address
+          </li>
+          <li>
+            <span style={{ display: "inline-block", width: "20px" }}>3.</span>{" "}
+            See the result
+          </li>
         </ul>
         <input
           type="text"

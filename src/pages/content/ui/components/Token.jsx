@@ -61,32 +61,83 @@ export default function Token({ address, addressData }) {
             wordBreak: "break-all",
           }}
         >
-          <p
-            style={{
-              backgroundColor: " #f3f5f6",
-              margin: "4px 10px 4px 0",
-              padding: "0 4px",
-            }}
-          >
-            Name：{addressData?.details?.name}
-          </p>
-          <p
-            style={{
-              backgroundColor: " #f3f5f6",
-              margin: "4px 10px 4px 0",
-              padding: "0 4px",
-            }}
-          >
-            Symbol：{addressData?.details?.symbol}
-          </p>
-
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <div style={{ marginRight: "12px" }}>
+              <img
+                src={addressData?.details?.iconUrl}
+                alt={addressData?.details?.name}
+              />
+            </div>
+            <div>
+              <p
+                style={{
+                  margin: "0",
+                  fontSize: "24px",
+                }}
+              >
+                {addressData?.details?.symbol}
+              </p>
+            </div>
+          </div>
           <div
             style={{
               borderRadius: "4px",
               wordBreak: "break-all",
               color: "black",
+              backgroundColor: " #f3f5f6",
+              marginRight: "10px",
             }}
-          ></div>
+          >
+            <p
+              style={{
+                margin: "4px 10px 4px 0",
+                padding: "0 4px",
+                fontSize: "14px",
+                fontWeight: "bold",
+              }}
+            >
+              Name：
+            </p>
+            <p
+              style={{
+                margin: "4px 10px 4px 0",
+                padding: "0 4px",
+                fontSize: "12px",
+              }}
+            >
+              {addressData?.details?.name}
+            </p>
+          </div>
+          <div
+            style={{
+              borderRadius: "4px",
+              wordBreak: "break-all",
+              color: "black",
+              backgroundColor: " #f3f5f6",
+              marginRight: "10px",
+            }}
+          >
+            <p
+              style={{
+                margin: "4px 10px 4px 0",
+                padding: "0 4px",
+                fontSize: "14px",
+                fontWeight: "bold",
+              }}
+            >
+              Price：
+            </p>
+            <p
+              style={{
+                margin: "4px 10px 4px 0",
+                padding: "0 4px",
+                fontSize: "12px",
+              }}
+            >
+              {addressData?.details?.price}
+            </p>
+          </div>
+
           {address && (
             <div
               style={{
