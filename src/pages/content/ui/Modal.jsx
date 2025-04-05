@@ -12,11 +12,19 @@ export default function Modal() {
   const [displayMode, setDisplayMode] = useState("loading");
   const [addressData, setAddressData] = useState(null);
   const [interactionsData, setInteractionsData] = useState(null);
+  const ETH_LOGO_URL =
+    "https://bucket-kai-test.s3.ap-northeast-1.amazonaws.com/Ethereum_Network_logo.svg";
+  const Base_LOGO_URL =
+    "https://bucket-kai-test.s3.ap-northeast-1.amazonaws.com/Base_Network_Logo.svg";
 
   const setDisplayModeByAddressType = (data) => {
-    if (!data || !data.addressType) return;
+    if (!data) return;
 
-    switch (data.addressType) {
+    const targetData = Array.isArray(data) ? data[0] : data;
+
+    if (!targetData.addressType) return;
+
+    switch (targetData.addressType) {
       case "ERC-20":
         setDisplayMode("token");
         break;
@@ -120,14 +128,16 @@ export default function Modal() {
         case "addressDataFetched":
           setDisplayMode("loading");
           if (request.data) {
-            setAddressData(request.data);
-            setDisplayModeByAddressType(request.data);
+            console.log("收到的原始數據:", request.data.data);
+
+            setAddressData(request.data.data[0]);
+            setDisplayModeByAddressType(request.data.data);
           }
           break;
 
         case "interactionsDataFetched":
           if (request.data) {
-            setInteractionsData(request.data);
+            setInteractionsData(request.data.data);
           }
           break;
         case "backgroundReady":
@@ -222,13 +232,25 @@ export default function Modal() {
                 address={address}
                 addressData={addressData}
                 interactionsData={interactionsData}
+                ETH_LOGO_URL={ETH_LOGO_URL}
+                Base_LOGO_URL={Base_LOGO_URL}
               />
             )}
             {displayMode === "token" && (
-              <Token address={address} addressData={addressData} />
+              <Token
+                address={address}
+                addressData={addressData}
+                ETH_LOGO_URL={ETH_LOGO_URL}
+                Base_LOGO_URL={Base_LOGO_URL}
+              />
             )}
             {displayMode === "nfts" && (
-              <NFTs address={address} addressData={addressData} />
+              <NFTs
+                address={address}
+                addressData={addressData}
+                ETH_LOGO_URL={ETH_LOGO_URL}
+                Base_LOGO_URL={Base_LOGO_URL}
+              />
             )}
             {displayMode === "loading" && <Loading />}
           </div>

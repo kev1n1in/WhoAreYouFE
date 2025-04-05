@@ -1,10 +1,17 @@
 /* global chrome */
 
-export default function Wallet({ address, addressData }) {
+export default function Wallet({
+  address,
+  addressData,
+  ETH_LOGO_URL,
+  Base_LOGO_URL,
+}) {
   console.log("content in data response box", address, addressData);
   const handleClose = () => {
     chrome.runtime.sendMessage({ action: "hideModal" });
   };
+  const chainLogoUrl =
+    addressData.chain === "ETHEREUM" ? ETH_LOGO_URL : Base_LOGO_URL;
   return (
     <div
       style={{
@@ -47,9 +54,13 @@ export default function Wallet({ address, addressData }) {
           X
         </button>
       </div>
+
       <div>
-        <h1 style={{ margin: "0" }}>NFT</h1>
+        <h1 style={{ margin: "0", display: "inline" }}>
+          {addressData.addressType}
+        </h1>
       </div>
+
       <div>
         <img
           src={addressData?.details?.imageUrl}
@@ -60,62 +71,79 @@ export default function Wallet({ address, addressData }) {
           }}
         />
       </div>
+
       <div
         style={{
           borderRadius: "4px",
           wordBreak: "break-all",
         }}
       >
-        <p
-          style={{
-            backgroundColor: " #f3f5f6",
-            margin: "4px 10px 4px 0",
-            padding: "0 4px",
-          }}
-        >
-          Name: {addressData?.details?.name}
-        </p>
-        <p
-          style={{
-            backgroundColor: " #f3f5f6",
-            margin: "4px 10px 4px 0",
-            padding: "0 4px",
-          }}
-        >
-          Total: {addressData?.details?.totalSupply}
-        </p>
-      </div>
-      {address && (
+        <div style={{ display: "flex" }}>
+          <div
+            style={{
+              display: "inline-block",
+              backgroundColor: " #f3f5f6",
+              padding: " 0px 4px",
+              width: "110px",
+              boxSizing: "border-box",
+              marginBottom: "4px",
+              borderRadius: "4px 0 0 0",
+              marginRight: "5px",
+            }}
+          >
+            <p style={{ fontSize: "12px", margin: 0 }}>Chain</p>
+            <img
+              src={chainLogoUrl}
+              alt={addressData?.chain}
+              style={{
+                width: "24px",
+                height: "24px",
+              }}
+            />
+          </div>
+          <div
+            style={{
+              display: "inline-block",
+              backgroundColor: " #f3f5f6",
+              padding: " 0px 4px",
+              width: "110px",
+              boxSizing: "border-box",
+              marginBottom: "4px",
+              borderRadius: "0 4px 0 0",
+            }}
+          >
+            <p style={{ fontSize: "12px", margin: 0 }}>Total</p>
+            <p style={{ margin: 0 }}> {addressData?.details?.totalSupply}</p>
+          </div>
+        </div>
+
         <div
           style={{
-            borderRadius: "4px",
-            wordBreak: "break-all",
-            color: "black",
             backgroundColor: " #f3f5f6",
-            marginRight: "10px",
+            padding: " 0px 4px",
+            width: "225px",
+            boxSizing: "border-box",
+            marginBottom: "4px",
           }}
         >
-          <p
-            style={{
-              margin: "4px 10px 4px 0",
-              padding: "0 4px",
-              fontSize: "14px",
-              fontWeight: "bold",
-            }}
-          >
-            Address：
-          </p>
-          <p
-            style={{
-              margin: "4px 10px 4px 0",
-              padding: "0 4px",
-              fontSize: "12px",
-            }}
-          >
-            {address}
-          </p>
+          <p style={{ fontSize: "12px", margin: 0 }}>Name</p>
+          <p style={{ margin: 0 }}>{addressData?.details?.name}</p>
         </div>
-      )}
+
+        <div
+          style={{
+            backgroundColor: " #f3f5f6",
+            padding: " 0px 4px",
+            width: "225px",
+            boxSizing: "border-box",
+            marginBottom: "4px",
+            borderRadius: "0 0 4px 4px",
+          }}
+        >
+          <p style={{ fontSize: "12px", margin: 0 }}>Address</p>
+          <p style={{ margin: 0 }}>{address}</p>
+        </div>
+      </div>
     </div>
   );
 }

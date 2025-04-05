@@ -10,6 +10,19 @@ function triggerListening(tabId) {
       console.error("mouseover detection script failed:", error)
     );
 }
+
+function setupTabListeners() {
+  chrome.tabs.onActivated.addListener((activeInfo) => {
+    triggerListening(activeInfo.tabId);
+  });
+
+  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (changeInfo.status === "complete" && tab.active) {
+      triggerListening(tabId);
+    }
+  });
+}
+
 function triggerMouseOver() {
   console.log("ethereum address detecting");
   const ETH_ADDRESS_REGEX = /\b0x[a-fA-F0-9]{40}\b/g;
@@ -32,57 +45,57 @@ function triggerMouseOver() {
     } catch (error) {
       console.error("發送showModal消息時出錯:", error);
     }
+
+    // 深度搜索元素中的以太坊地址
+    function findEthAddressInElement(element) {
+      // 如果元素不存在或已經檢查過，則退出
+      if (!element || element._ethAddressChecked) return null;
+
+      // 標記元素已檢查，避免重複檢查
+      element._ethAddressChecked = true;
+
+      // 首先檢查元素的文本內容
+      if (element.textContent) {
+        const matches = element.textContent.match(ETH_ADDRESS_REGEX);
+        if (matches) return matches[0];
+      }
+
+      // 檢查元素的所有屬性
+      const attributesToCheck = [
+        "href",
+        "data-address",
+        "value",
+        "placeholder",
+        "data-clipboard-text",
+        "data-highlight-target",
+        "data-bs-html",
+        "title",
+      ];
+
+      for (const attr of attributesToCheck) {
+        if (element.hasAttribute(attr)) {
+          const attrValue = element.getAttribute(attr);
+          const matches = attrValue.match(ETH_ADDRESS_REGEX);
+          if (matches) return matches[0];
+        }
+      }
+
+      return null;
+    }
+
     document.addEventListener("mouseover", function (event) {
       const targetElement = event.target;
       try {
-        let foundAddress = null;
-        if (targetElement.childNodes) {
-          for (const node of targetElement.childNodes) {
-            if (node.nodeType === Node.TEXT_NODE && node.textContent) {
-              const matches = node.textContent.match(ETH_ADDRESS_REGEX);
-              if (matches) {
-                foundAddress = matches;
-                break;
-              }
-            }
-          }
-        }
+        // 只檢查當前鼠標懸停的元素
+        const addressFound = findEthAddressInElement(targetElement);
 
-        if (!foundAddress) {
-          const directAttributes = [
-            "href",
-            "data-address",
-            "value",
-            "placeholder",
-          ];
-          for (const attr of directAttributes) {
-            if (targetElement.hasAttribute(attr)) {
-              const attrValue = targetElement.getAttribute(attr);
-
-              if (
-                (attr === "href" && targetElement.textContent === attrValue) ||
-                (attr === "value" && targetElement.tagName === "INPUT") ||
-                (attr === "placeholder" && targetElement.tagName === "INPUT")
-              ) {
-                const matches = attrValue.match(ETH_ADDRESS_REGEX);
-                if (matches) {
-                  foundAddress = matches;
-                  break;
-                }
-              }
-            }
-          }
-        }
-
-        if (foundAddress) {
-          console.log("直接指向區塊鏈地址:", foundAddress);
-          const address = foundAddress[0];
-          if (!address) return;
+        if (addressFound) {
+          console.log("檢測到以太坊地址:", addressFound);
 
           try {
             chrome.runtime.sendMessage({
               action: "fetchAddressData",
-              address: address,
+              address: addressFound,
             });
           } catch (error) {
             console.error("Failed to send fetch request message:", error);
@@ -92,7 +105,7 @@ function triggerMouseOver() {
             chrome.runtime.sendMessage({
               action: "addressEvent",
               eventType: "hover",
-              address: address,
+              address: addressFound,
             });
           } catch (error) {
             console.error("Failed to send address event message:", error);
@@ -103,7 +116,7 @@ function triggerMouseOver() {
             chrome.runtime.sendMessage(
               {
                 action: "addressFoundFromContent",
-                address: address,
+                address: addressFound,
               },
               () => {
                 if (chrome.runtime.lastError) {
@@ -122,6 +135,11 @@ function triggerMouseOver() {
             "mouseleave",
             function () {
               console.log("滑鼠離開區塊鏈地址元素");
+
+              // 清除標記，允許再次檢測
+              setTimeout(() => {
+                targetElement._ethAddressChecked = false;
+              }, 1000);
             },
             { once: true }
           );
@@ -257,11 +275,11 @@ function sendTabMessage(tabId, message) {
   }
 }
 
-// Add a function to handle the fetch request in the background
 async function fetchAddressData(address) {
+  const selfAddress = await getSelfAddress();
   try {
     const response = await fetch(
-      `https://whoareyou.name/api/1.0/address/${address}`
+      `https://whoareyou.name/api/1.0/address/${address}?selfAddress=${selfAddress}`
     );
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -275,7 +293,6 @@ async function fetchAddressData(address) {
   }
 }
 
-// Helper function to get the user's self address from storage
 async function getSelfAddress() {
   return new Promise((resolve) => {
     chrome.storage.local.get(["selfAddress"], (result) => {
@@ -311,4 +328,5 @@ export {
   fetchAddressData,
   fetchInteractions,
   getSelfAddress,
+  setupTabListeners,
 };

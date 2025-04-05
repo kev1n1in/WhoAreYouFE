@@ -1,13 +1,7 @@
 /* global chrome */
 
 export default function Wallet({ address, addressData, interactionsData }) {
-  console.log(
-    "content in data response box",
-    address,
-    addressData,
-    interactionsData
-  );
-  // Conditional rendering based on contract
+  console.log("content in data response box123", addressData);
   const hasInteracted = interactionsData?.details?.interacted;
   console.log("hasInteracted", hasInteracted);
   const handleClose = () => {
@@ -23,7 +17,7 @@ export default function Wallet({ address, addressData, interactionsData }) {
         paddingLeft: "20px",
         paddingBottom: "10px",
         width: "250px",
-        minHeight: "100px",
+        minHeight: "300px",
         backgroundColor: "white",
         border: "2px solid black",
         borderRadius: 0,
@@ -68,28 +62,20 @@ export default function Wallet({ address, addressData, interactionsData }) {
           style={{
             borderRadius: "4px",
             wordBreak: "break-all",
+            color: "black",
           }}
         >
-          <div
-            style={{
-              borderRadius: "4px",
-              wordBreak: "break-all",
-              color: "black",
-            }}
-          >
-            {addressData && addressData.name && (
-              <p
-                style={{
-                  margin: "4px 10px 4px 0",
-                  padding: "0 4px",
-                  backgroundColor: " #f3f5f6",
-                }}
-              >
-                {addressData.name}
-              </p>
-            )}
-          </div>
-
+          {addressData && addressData.name && (
+            <p
+              style={{
+                margin: "4px 10px 4px 0",
+                padding: "0 4px",
+                backgroundColor: " #f3f5f6",
+              }}
+            >
+              {addressData.name}
+            </p>
+          )}
           {address && (
             <div
               style={{

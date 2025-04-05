@@ -1,5 +1,5 @@
 /* global chrome */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CyberTitle from "./CyberTitle";
 import cyber_bg from "../../assets/cyber_bg.jpg";
 import "@pages/popup/Popup.css";
@@ -11,6 +11,18 @@ const Popup = () => {
   const [addressSaved, setAddressSaved] = useState(false);
   const [savedAddress, setSavedAddress] = useState("");
 
+  // 在組件加載時檢查是否已保存地址
+  useEffect(() => {
+    chrome.storage.local.get(["selfAddress"], (result) => {
+      if (result.selfAddress) {
+        setSavedAddress(result.selfAddress);
+        setAddressSaved(true);
+        // 已有保存的地址，直接開始監聽
+        handleListening();
+      }
+    });
+  }, []);
+
   const handleListening = () => {
     chrome.runtime.sendMessage({
       type: "OPEN_CONTENT",
@@ -20,7 +32,6 @@ const Popup = () => {
 
   const handleInputChange = (e) => {
     const address = e.target.value;
-    console.log("testaddress:", address);
     setEthAddress(address);
   };
 

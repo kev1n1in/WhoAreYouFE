@@ -1,6 +1,9 @@
 /* global chrome */
 export default function Token({ address, addressData }) {
-  console.log("content in data response box", address, addressData);
+  // 處理 addressData 可能是數組的情況
+  const data = Array.isArray(addressData) ? addressData[0] : addressData;
+
+  console.log("Token 組件處理後的數據:", data);
 
   const handleClose = () => {
     chrome.runtime.sendMessage({ action: "hideModal" });
@@ -63,10 +66,7 @@ export default function Token({ address, addressData }) {
         >
           <div style={{ display: "flex", alignItems: "center" }}>
             <div style={{ marginRight: "12px" }}>
-              <img
-                src={addressData?.details?.iconUrl}
-                alt={addressData?.details?.name}
-              />
+              <img src={data?.details?.iconUrl} alt={data?.details?.name} />
             </div>
             <div>
               <p
@@ -75,7 +75,7 @@ export default function Token({ address, addressData }) {
                   fontSize: "24px",
                 }}
               >
-                {addressData?.details?.symbol}
+                {data?.details?.symbol}
               </p>
             </div>
           </div>
@@ -105,7 +105,7 @@ export default function Token({ address, addressData }) {
                 fontSize: "12px",
               }}
             >
-              {addressData?.details?.name}
+              {data?.details?.name}
             </p>
           </div>
           <div
@@ -134,7 +134,7 @@ export default function Token({ address, addressData }) {
                 fontSize: "12px",
               }}
             >
-              {addressData?.details?.price}
+              {data?.details?.price}
             </p>
           </div>
 

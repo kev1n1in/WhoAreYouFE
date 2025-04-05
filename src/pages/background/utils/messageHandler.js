@@ -153,8 +153,26 @@ export function handleMessage(request, sender, sendResponse) {
         );
         fetchAddressData(request.address)
           .then((data) => {
+            // 詳細記錄獲取到的數據
+            console.log("fetchAddressData 返回的原始數據:", data);
+            console.log(
+              "數據類型:",
+              typeof data,
+              Array.isArray(data) ? "是數組" : "不是數組"
+            );
+            if (Array.isArray(data)) {
+              console.log("數組長度:", data.length);
+              if (data.length > 0) {
+                console.log("第一個元素:", data[0]);
+              }
+            }
+
             // Send the fetched data back to the content script if needed
             if (tabId) {
+              console.log(
+                "發送 addressDataFetched 消息到 content script, 數據:",
+                data
+              );
               sendTabMessage(tabId, {
                 action: "addressDataFetched",
                 address: request.address,
