@@ -23,7 +23,7 @@ export default function Wallet({ address, addressData, interactionsData }) {
         paddingLeft: "20px",
         paddingBottom: "10px",
         width: "250px",
-        minHeight: "300px",
+        minHeight: "100px",
         backgroundColor: "white",
         border: "2px solid black",
         borderRadius: 0,

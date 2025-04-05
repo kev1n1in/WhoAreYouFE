@@ -20,6 +20,7 @@ const Popup = () => {
 
   const handleInputChange = (e) => {
     const address = e.target.value;
+    console.log("testaddress:", address);
     setEthAddress(address);
   };
 

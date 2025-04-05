@@ -274,13 +274,29 @@ async function fetchAddressData(address) {
     return { error: error.message };
   }
 }
-async function fetchInteractions(address, selfAddress) {
+
+// Helper function to get the user's self address from storage
+async function getSelfAddress() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(["selfAddress"], (result) => {
+      resolve(result.selfAddress || "");
+    });
+  });
+}
+
+async function fetchInteractions(address) {
   console.log("fetching interactions for address:", address);
+
+  const selfAddress = await getSelfAddress();
   console.log("selfAddress:", selfAddress);
+
   try {
     const response = await fetch(
-      `https://whoareyou.name/api/1.0/address/0x015650d60DEc6C25eD759FC776D9A29836fb965f?selfAddress=0x19d146A2A4b7d84842E2d6C9691bDd5b0cAd8489`
+      `https://whoareyou.name/api/1.0/address/${address}?selfAddress=${selfAddress}`
     );
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
     const data = await response.json();
     console.log("Interactions data response:", data);
     return data;
@@ -294,4 +310,5 @@ export {
   triggerListening,
   fetchAddressData,
   fetchInteractions,
+  getSelfAddress,
 };
