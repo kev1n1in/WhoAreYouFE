@@ -1,10 +1,18 @@
 /* global chrome */
-export default function Token({ address, addressData }) {
-  // 處理 addressData 可能是數組的情況
+export default function Token({
+  address,
+  addressData,
+  ETH_LOGO_URL,
+  Base_LOGO_URL,
+}) {
   const data = Array.isArray(addressData) ? addressData[0] : addressData;
 
   console.log("Token 組件處理後的數據:", data);
-
+  const chainLogoUrl =
+    addressData.chain === "ETHEREUM" ? ETH_LOGO_URL : Base_LOGO_URL;
+  const iconUrl = address?.details?.basicInfo.iconUrl
+    ? address?.details?.basicInfo.iconUrl
+    : "https://bucket-kai-test.s3.ap-northeast-1.amazonaws.com/unknown_logo.svg";
   const handleClose = () => {
     chrome.runtime.sendMessage({ action: "hideModal" });
   };
@@ -13,10 +21,10 @@ export default function Token({ address, addressData }) {
     <div
       style={{
         position: "fixed",
+        paddingBottom: "10px",
+        paddingLeft: "20px",
         bottom: 0,
         right: 0,
-        paddingLeft: "20px",
-        paddingBottom: "10px",
         width: "250px",
         minHeight: "300px",
         backgroundColor: "white",
@@ -39,136 +47,128 @@ export default function Token({ address, addressData }) {
         <button
           onClick={handleClose}
           style={{
-            fontWeight: "bold",
-            backgroundColor: "transparent",
+            position: "absolute",
+            right: "10px",
+            background: "none",
             border: "none",
-            color: "black",
-            cursor: "pointer",
             fontSize: "20px",
+            cursor: "pointer",
+            zIndex: 10002,
           }}
         >
           X
         </button>
       </div>
-      <h1 style={{ margin: "0" }}>Token</h1>
+
+      <div>
+        <h1 style={{ margin: "0", display: "inline" }}>
+          {addressData.addressType}
+        </h1>
+      </div>
 
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
+          borderRadius: "4px",
+          wordBreak: "break-all",
+          marginTop: "16px",
         }}
       >
+        <div style={{ display: "flex" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              backgroundColor: " #f3f5f6",
+              padding: " 0px 4px",
+              width: "45px",
+              height: "45px",
+              boxSizing: "border-box",
+              marginBottom: "4px",
+              borderRadius: "4px 0 0 0",
+              marginRight: "5px",
+            }}
+          >
+            <img
+              src={chainLogoUrl}
+              alt="Token icon"
+              style={{
+                width: "36px",
+                height: "36px",
+              }}
+            />
+          </div>
+          <div
+            style={{
+              backgroundColor: " #f3f5f6",
+              padding: " 0px 4px",
+              width: "175px",
+              height: "45px",
+              boxSizing: "border-box",
+              marginBottom: "4px",
+              borderRadius: "4px 0 0 0",
+            }}
+          >
+            <p style={{ fontSize: "12px", margin: 0 }}>Symbol</p>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <img
+                src={iconUrl}
+                alt="Token icon"
+                style={{
+                  width: "24px",
+                  height: "24px",
+                  marginRight: "4px",
+                }}
+              />
+              <span style={{ margin: 0 }}>
+                {addressData?.details?.basicInfo.symbol}
+              </span>
+            </div>
+          </div>
+        </div>
+
         <div
           style={{
-            borderRadius: "4px",
-            wordBreak: "break-all",
+            display: "inline-block",
+            backgroundColor: " #f3f5f6",
+            padding: " 0px 4px",
+            width: "225px",
+            boxSizing: "border-box",
+            marginBottom: "4px",
+            borderRadius: "4px 0 0 0",
+            marginRight: "5px",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <div style={{ marginRight: "12px" }}>
-              <img src={data?.details?.iconUrl} alt={data?.details?.name} />
-            </div>
-            <div>
-              <p
-                style={{
-                  margin: "0",
-                  fontSize: "24px",
-                }}
-              >
-                {data?.details?.symbol}
-              </p>
-            </div>
-          </div>
-          <div
-            style={{
-              borderRadius: "4px",
-              wordBreak: "break-all",
-              color: "black",
-              backgroundColor: " #f3f5f6",
-              marginRight: "10px",
-            }}
-          >
-            <p
-              style={{
-                margin: "4px 10px 4px 0",
-                padding: "0 4px",
-                fontSize: "14px",
-                fontWeight: "bold",
-              }}
-            >
-              Name：
-            </p>
-            <p
-              style={{
-                margin: "4px 10px 4px 0",
-                padding: "0 4px",
-                fontSize: "12px",
-              }}
-            >
-              {data?.details?.name}
-            </p>
-          </div>
-          <div
-            style={{
-              borderRadius: "4px",
-              wordBreak: "break-all",
-              color: "black",
-              backgroundColor: " #f3f5f6",
-              marginRight: "10px",
-            }}
-          >
-            <p
-              style={{
-                margin: "12px 10px 4px 0",
-                padding: "0 4px",
-                fontSize: "14px",
-                fontWeight: "bold",
-              }}
-            >
-              Price：
-            </p>
-            <p
-              style={{
-                margin: "4px 10px 4px 0",
-                padding: "0 4px",
-                fontSize: "12px",
-              }}
-            >
-              {data?.details?.price}
-            </p>
-          </div>
+          <p style={{ fontSize: "12px", margin: 0 }}>Name</p>
+          <p style={{ margin: 0 }}>{addressData?.details?.basicInfo.name}</p>
+        </div>
 
-          {address && (
-            <div
-              style={{
-                borderRadius: "4px",
-                wordBreak: "break-all",
-                color: "black",
-                backgroundColor: " #f3f5f6",
-                marginRight: "10px",
-              }}
-            >
-              <p
-                style={{
-                  margin: "12px 10px 4px 0",
-                  padding: "0 4px",
-                  fontSize: "14px",
-                  fontWeight: "bold",
-                }}
-              >
-                Address：
-              </p>
-              <p
-                style={{
-                  margin: "4px 10px 4px 0",
-                  padding: "0 4px",
-                  fontSize: "12px",
-                }}
-              >
-                {address}
-              </p>
-            </div>
-          )}
+        <div
+          style={{
+            display: "inline-block",
+            backgroundColor: " #f3f5f6",
+            padding: " 0px 4px",
+            width: "225px",
+            boxSizing: "border-box",
+            marginBottom: "4px",
+            borderRadius: "0 4px 0 0",
+          }}
+        >
+          <p style={{ fontSize: "12px", margin: 0 }}>Price</p>
+          <p style={{ margin: 0 }}> {addressData?.details?.basicInfo.price}</p>
+        </div>
+
+        <div
+          style={{
+            backgroundColor: " #f3f5f6",
+            padding: " 0px 4px",
+            width: "225px",
+            boxSizing: "border-box",
+            marginBottom: "4px",
+            borderRadius: "0 0 4px 4px",
+          }}
+        >
+          <p style={{ fontSize: "12px", margin: 0 }}>Address</p>
+          <p style={{ margin: 0 }}>{address}</p>
         </div>
       </div>
     </div>
