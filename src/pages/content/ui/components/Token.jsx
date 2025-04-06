@@ -17,6 +17,23 @@ export default function Token({
     chrome.runtime.sendMessage({ action: "hideModal" });
   };
 
+  const ampMap = {
+    decrease_more:
+      "https://bucket-kai-test.s3.ap-northeast-1.amazonaws.com/decrease_more.png",
+    decrease_less:
+      "https://bucket-kai-test.s3.ap-northeast-1.amazonaws.com/decrease_less.png",
+    increase_more:
+      "https://bucket-kai-test.s3.ap-northeast-1.amazonaws.com/increase_more.png",
+    increase_less:
+      "https://bucket-kai-test.s3.ap-northeast-1.amazonaws.com/increase_less.png",
+  };
+  function getImageUrl(amplitude_class, direction_class) {
+    const dir = direction_class.toLowerCase(); // 'increase' or 'decrease'
+    const amp = amplitude_class.includes("more than") ? "more" : "less"; // 判斷幅度是 more 或 less
+    const key = `${dir}_${amp}`; // 組合 key，如 'increase_more'
+
+    return ampMap[key] || null; // 回傳對應圖片 URL，找不到就回傳 null
+  }
   return (
     <div
       style={{
@@ -70,7 +87,7 @@ export default function Token({
         style={{
           borderRadius: "4px",
           wordBreak: "break-all",
-          marginTop: "16px",
+          marginTop: "4px",
         }}
       >
         <div style={{ display: "flex" }}>
@@ -147,14 +164,41 @@ export default function Token({
             display: "inline-block",
             backgroundColor: " #f3f5f6",
             padding: " 0px 4px",
-            width: "225px",
+            width: "175px",
+            boxSizing: "border-box",
+            marginBottom: "4px",
+            borderRadius: "0 4px 0 0",
+            marginRight: "5px",
+          }}
+        >
+          <p style={{ fontSize: "12px", margin: 0 }}>Price</p>
+          <p style={{ margin: 0 }}> {addressData?.details?.basicInfo.price}</p>
+        </div>
+        <div
+          style={{
+            display: "inline-block",
+            backgroundColor: " #f3f5f6",
+            padding: " 0px 4px",
+            width: "45px",
             boxSizing: "border-box",
             marginBottom: "4px",
             borderRadius: "0 4px 0 0",
           }}
         >
-          <p style={{ fontSize: "12px", margin: 0 }}>Price</p>
-          <p style={{ margin: 0 }}> {addressData?.details?.basicInfo.price}</p>
+          <img
+            src={getImageUrl(
+              addressData?.details?.features.prediction.amplitude_class,
+              addressData?.details?.features.prediction.direction_class
+            )}
+            style={{
+              margin: 0,
+              width: "36px",
+              height: "36px",
+              position: "relative",
+              right: "2px",
+              top: "2px",
+            }}
+          ></img>
         </div>
 
         <div
