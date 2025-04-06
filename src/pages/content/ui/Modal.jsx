@@ -191,7 +191,6 @@ export default function Modal() {
             console.log("發送初始就緒消息失敗，重試中...:", error);
           } else {
             console.log("content script 已發送初始就緒消息");
-            // setIsBackgroundReady(true);
           }
         }
       );
